@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Click the Box Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+    }
+
+    #gameArea {
+      position: relative;
+      width: 100vw;
+      height: 90vh;
+      overflow: hidden;
+      background-color: #e1f5fe;
+    }
+
+    #box {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background-color: #0288d1;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    #scoreBoard {
+      font-size: 24px;
+      margin: 10px;
+    }
+
+    #startBtn {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #startBtn:hover {
+      background-color: #004d40;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Click the Box Game</h1>
+  <div id="scoreBoard">Score: 0 | Time: 30s</div>
+  <button id="startBtn">Start Game</button>
+  <div id="gameArea">
+    <div id="box" style="display: none;"></div>
+  </div>
+
+  <script>
+    const box = document.getElementById("box");
+    const scoreBoard = document.getElementById("scoreBoard");
+    const startBtn = document.getElementById("startBtn");
+    const gameArea = document.getElementById("gameArea");
+
+    let score = 0;
+    let timeLeft = 30;
+    let timerInterval;
+
+    function randomPosition() {
+      const maxX = gameArea.clientWidth - 60;
+      const maxY = gameArea.clientHeight - 60;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      box.style.left = `${x}px`;
+      box.style.top = `${y}px`;
+    }
+
+    function updateScoreBoard() {
+      scoreBoard.textContent = `Score: ${score} | Time: ${timeLeft}s`;
+    }
+
+    function startGame() {
+      score = 0;
+      timeLeft = 30;
+      updateScoreBoard();
+      startBtn.disabled = true;
+      box.style.display = "block";
+      randomPosition();
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateScoreBoard();
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          box.style.display = "none";
+          startBtn.disabled = false;
+          alert("Time's up! Your score: " + score);
+        }
+      }, 1000);
+    }
+
+    box.addEventListener("click", () => {
+      score++;
+      updateScoreBoard();
+      randomPosition();
+    });
+
+    startBtn.addEventListener("click", startGame);
+  </script>
+
+</body>
+</html>
